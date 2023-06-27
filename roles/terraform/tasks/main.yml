@@ -30,12 +30,8 @@
     dest: /opt/tflint
 
 - name: Install Bash config
-  ansible.builtin.copy:
-    src: terraform.bashrc
-    dest: ~/.bashrc.d/
+  ansible.builtin.copy: src=terraform.bashrc dest=~/.bashrc.d/
 
 - name: Set GitHub Actions environment
-  ansible.builtin.shell: |
-    echo '/opt/tfenv/bin:/opt/tgenv/bin:/opt/tflint' >> $GITHUB_PATH
-    echo "TF_PLUGIN_CACHE_DIR=\"${HOME}/.terraform.d/plugin-cache\"" >> $GITHUB_ENV
+  ansible.builtin.shell: echo '/opt/tfenv/bin:/opt/tgenv/bin:/opt/tflint' >> $GITHUB_PATH
   when: _github_actions
