@@ -38,6 +38,4 @@
   ansible.builtin.shell: |
     echo '/opt/tfenv/bin:/opt/tgenv/bin:/opt/tflint' >> $GITHUB_PATH
     echo "TF_PLUGIN_CACHE_DIR=\"${HOME}/.terraform.d/plugin-cache\"" >> $GITHUB_ENV
-    echo "TFENV_AUTO_INSTALL='true'" >> $GITHUB_ENV
-    echo "TGENV_AUTO_INSTALL='true'" >> $GITHUB_ENV
   when: _github_actions
