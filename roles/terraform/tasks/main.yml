@@ -38,5 +38,5 @@
   ansible.builtin.blockinfile:
     marker: '# {mark} terraform config'
     path: '{{ _github_env }}'
-    block: '{{ lookup("ansible.builtin.template", "terraform.bashrc") }}'
+    block: '{{ lookup("ansible.builtin.file", "terraform.bashrc") }}'
   when: _github_env
