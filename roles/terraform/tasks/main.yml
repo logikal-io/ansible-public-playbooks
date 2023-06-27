@@ -14,7 +14,7 @@
 
 - name: Install Terragrunt Commons
   ansible.builtin.git:
-    repo: https://github.com/logikal-io/terragrunt-commons.git
+    repo: '{{ _github_repo_url }}logikal-io/terragrunt-commons.git'
     dest: ~/.terragrunt
     version: '{{ terragrunt_commons_version }}'
 

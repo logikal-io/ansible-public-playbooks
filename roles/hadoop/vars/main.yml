@@ -7,7 +7,7 @@ hadoop_aws_version: 3.3.5  # same as hadoop_version
 # Note: the version must be what is shown in the "compile dependencies" section of hadoop-aws
 hadoop_aws_java_sdk_version: 1.12.316
 
-_github_env: '{{ lookup("ansible.builtin.env", "GITHUB_ENV") }}'
+_github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") }}'
 _hadoop_endpoint: https://downloads.apache.org/hadoop/common/hadoop-{{ hadoop_version }}
 _hadoop_home: /opt/hadoop
 _hadoop_lib_dir: '{{ _hadoop_home }}/share/hadoop/common/lib'
