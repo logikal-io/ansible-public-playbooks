@@ -1,0 +1,42 @@
+- name: Install Terraform environment manager
+  become: true
+  ansible.builtin.git:
+    repo: https://github.com/tfutils/tfenv.git
+    dest: /opt/tfenv
+    version: '{{ tfenv_version }}'
+
+- name: Install Terragrunt environment manager
+  become: true
+  ansible.builtin.git:
+    repo: https://github.com/cunymatthieu/tgenv.git
+    dest: /opt/tgenv
+    version: '{{ tgenv_version }}'
+
+- name: Install Terragrunt Commons
+  ansible.builtin.git:
+    repo: git@github.com:logikal-io/terragrunt-commons.git
+    dest: ~/.terragrunt
+    version: '{{ terragrunt_commons_version }}'
+
+- name: Create TFLint folder
+  become: true
+  ansible.builtin.file: path=/opt/tflint state=directory
+
+- name: Install TFLint
+  become: true
+  ansible.builtin.unarchive:
+    src: '{{ _tflint_endpoint }}/{{ tflint_version }}/tflint_linux_amd64.zip'
+    remote_src: true
+    dest: /opt/tflint
+
+- name: Install Bash config
+  ansible.builtin.copy:
+    src: terraform.bashrc
+    dest: ~/.bashrc.d/
+
+- name: Set GitHub Actions environment
+  ansible.builtin.blockinfile:
+    marker: '# {mark} terraform config'
+    path: '{{ _github_env }}'
+    block: '{{ lookup("ansible.builtin.template", "terraform.bashrc") }}'
+  when: _github_env

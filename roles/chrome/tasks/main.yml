@@ -1,0 +1,6 @@
+- name: Install Chrome
+  become: true
+  ansible.builtin.apt:
+    deb: '{{ _chrome_domain }}/{{ _chrome_endpoint }}/{{ _chrome_deb_file }}'
+    allow_downgrade: true
+  when: _chrome_version != _current_chrome_version
