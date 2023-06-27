@@ -1,5 +1,5 @@
 # Available versions: https://github.com/tfutils/tfenv/commits/master
-tfenv_version: 1ccfddb22005b34eacaf06a9c33f58f14e816ec  # commit 2022-10-01 / checked 2023-06-24
+tfenv_version: 1ccfddb22005b34eacaf06a9c33f58f14e816ec9  # commit 2022-10-01 / checked 2023-06-24
 # Available versions: https://github.com/cunymatthieu/tgenv/commits/master
 tgenv_version: dd720f62051bb748f75eee2d83d6768171d45830  # commit 2020-04-18 / checked 2023-06-24
 # Available versions: https://github.com/terraform-linters/tflint/releases
