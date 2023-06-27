@@ -1,0 +1,16 @@
+# Available package versions:
+# https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
+chrome_package_version: current
+
+_chrome_version: '{{ chrome_package_version | regex_search("[0-9.]+") }}'
+_current_chrome_version: '{{
+  lookup("ansible.builtin.pipe", "google-chrome --version 2>/dev/null || echo none")
+  |regex_search("[0-9.]+")
+}}'
+
+_chrome_domain: https://dl.google.com
+_chrome_endpoint: '{{
+  "linux/direct" if chrome_package_version == "current"
+  else "linux/chrome/deb/pool/main/g/google-chrome-stable"
+}}'
+_chrome_deb_file: google-chrome-stable_{{ chrome_package_version }}_amd64.deb

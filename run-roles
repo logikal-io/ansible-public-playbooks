@@ -1,0 +1,42 @@
+#!/bin/bash
+name="$(basename $0)"
+usage="${name} [-h] -r role..."
+description="Runs roles."
+options="
+  -h       show help
+  -r role  the roles to run
+  -v vars  the variables to set"
+
+emph="\e[1;34m"
+reset="\e[0m"
+
+_error() {
+    echo "${name}: error: invalid arguments"
+    echo "usage: ${usage}"
+    exit 1
+}
+_help() {
+    echo -e "${emph}Usage:${reset} ${usage}\n"
+    echo -e "${description}\n"
+    echo -e "${emph}Options:${reset}${options}"
+    exit
+}
+
+# Processing command-line arguments
+tags=''
+vars='{}'
+while getopts hr:v: OPT; do
+    case ${OPT} in
+        h) _help ;;
+        r) tags+=" --tags ${OPTARG}" ;;
+        v) vars="${OPTARG}" ;;
+        \?) _error ;;
+    esac
+done
+if [[ -z "${tags}" ]]; then _error; fi
+
+# Checking standard input type
+if [[ -z "${GITHUB_ACTIONS}" ]]; then ask_pass='--ask-become-pass'; else ask_pass=''; fi
+
+# Run selected roles
+ansible-playbook -i localhost.yml ${ask_pass} ${tags} --extra-vars "${vars}" tagged-roles.yml

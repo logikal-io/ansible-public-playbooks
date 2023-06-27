@@ -1,0 +1,7 @@
+- hosts: localhost
+  tags: never
+  roles:
+    - {role: chrome, tags: chrome}
+    - {role: chromedriver, tags: chromedriver}
+    - {role: hadoop, tags: hadoop}
+    - {role: terraform, tags: terraform}

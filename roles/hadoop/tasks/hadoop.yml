@@ -1,0 +1,22 @@
+- name: Remove existing Hadoop installation
+  become: true
+  ansible.builtin.file: path={{ _hadoop_home }} state=absent
+
+- name: Create temporary folder
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: .hadoop
+  register: temp_dir
+
+- name: Download Hadoop
+  ansible.builtin.unarchive:
+    src: '{{ _hadoop_endpoint }}/hadoop-{{ hadoop_version }}.tar.gz'
+    remote_src: true
+    dest: '{{ temp_dir.path }}'
+
+- name: Install Hadoop
+  become: true
+  ansible.builtin.copy:
+    src: '{{ temp_dir.path }}/hadoop-{{ hadoop_version }}/'
+    dest: '{{ _hadoop_home }}'
+    remote_src: true

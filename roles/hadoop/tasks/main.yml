@@ -1,0 +1,36 @@
+- ansible.builtin.import_tasks: hadoop.yml
+  when: hadoop_version != _current_hadoop_version
+
+- name: Install Bash config
+  ansible.builtin.template:
+    src: hadoop.bashrc
+    dest: ~/.bashrc.d/
+
+- name: Set GitHub Actions environment
+  ansible.builtin.blockinfile:
+    marker: '# {mark} hadoop config'
+    path: '{{ _github_env }}'
+    block: '{{ lookup("ansible.builtin.template", "hadoop.bashrc") }}'
+  when: _github_env
+
+- name: Install Google Cloud Storage connector
+  become: true
+  ansible.builtin.get_url:
+    url: '{{ _hadoop_gcs_endpoint }}/{{ _hadoop_gcs_jar_file }}'
+    dest: '{{ _hadoop_lib_dir }}/{{ _hadoop_gcs_jar_file }}'
+  when: hadoop_gcs_connector_version
+
+- name: Install AWS module
+  become: true
+  ansible.builtin.get_url:
+    url: '{{ _hadoop_aws_endpoint }}/{{ hadoop_aws_version }}/{{ _hadoop_aws_jar_file }}'
+    dest: '{{ _hadoop_lib_dir }}/{{ _hadoop_aws_jar_file }}'
+  when: hadoop_aws_version
+
+- name: Install AWS Java SDK
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ _hadoop_aws_java_sdk_endpoint }}/{{ hadoop_aws_java_sdk_version }}/\
+          {{ _hadoop_aws_java_sdk_jar_file }}"
+    dest: '{{ _hadoop_lib_dir }}/{{ _hadoop_aws_java_sdk_jar_file }}'
+  when: hadoop_aws_java_sdk_version
