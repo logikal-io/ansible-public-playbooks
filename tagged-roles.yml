@@ -3,5 +3,6 @@
   roles:
     - {role: chrome, tags: chrome}
     - {role: chromedriver, tags: chromedriver}
+    - {role: fish, tags: fish}
     - {role: hadoop, tags: hadoop}
     - {role: terraform, tags: terraform}

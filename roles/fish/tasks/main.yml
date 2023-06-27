@@ -1,0 +1,4 @@
+- name: Install fish
+  become: true
+  ansible.builtin.apt:
+    name: fish
