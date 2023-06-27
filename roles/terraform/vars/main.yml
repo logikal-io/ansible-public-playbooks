@@ -7,5 +7,5 @@ tflint_version: v0.47.0  # commit 2023-06-18 / checked 2023-06-24
 # Available versions: https://github.com/logikal-io/terragrunt-commons/releases
 terragrunt_commons_version: main
 
-_github_env: '{{ lookup("ansible.builtin.env", "GITHUB_ENV") }}'
+_github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") }}'
 _tflint_endpoint: https://github.com/terraform-linters/tflint/releases/download
