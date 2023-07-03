@@ -1,6 +1,6 @@
 #!/bin/bash
 name="$(basename $0)"
-usage="${name} [-h] -r role..."
+usage="${name} [-h] [-v vars] -r role..."
 description="Runs roles."
 options="
   -h       show help
@@ -35,7 +35,7 @@ while getopts hr:v: OPT; do
 done
 if [[ -z "${tags}" ]]; then _error; fi
 
-# Checking standard input type
+# Do not ask for password in CI/CD
 if [[ -z "${GITHUB_ACTIONS}" ]]; then ask_pass='--ask-become-pass'; else ask_pass=''; fi
 
 # Run selected roles
