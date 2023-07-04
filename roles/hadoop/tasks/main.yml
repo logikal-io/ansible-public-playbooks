@@ -1,3 +1,13 @@
+# Single node cluster setup
+# (see https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
+- name: Install requirements
+  become: true
+  ansible.builtin.apt:
+    name:
+      - ssh          # used for managing Hadoop daemons
+      - pdsh         # improved ssh resource management
+      - default-jdk  # Java Development Kit required by Hadoop
+
 - ansible.builtin.import_tasks: hadoop.yml
   when: hadoop_version != _current_hadoop_version
 
