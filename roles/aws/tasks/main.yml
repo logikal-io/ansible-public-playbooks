@@ -1,0 +1,15 @@
+- name: Install dependencies
+  become: true
+  ansible.builtin.apt: name=jq
+
+- name: Install AWS CLI
+  ansible.builtin.pip: name=git+https://github.com/aws/aws-cli.git@v{{ aws_cli_major_version }}
+  when: aws_cli_major_version|string != _current_aws_cli_major_version
+  changed_when: true
+
+- name: Install command scripts
+  become: true
+  ansible.builtin.copy: src=bin/ dest=/usr/local/bin/ mode=0755
+
+- name: Install Bash config
+  ansible.builtin.copy: src=aws.bashrc dest=~/.bashrc.d/

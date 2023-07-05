@@ -1,0 +1,85 @@
+#!/bin/bash
+name="$(basename $0)"
+usage="${name} [-h] [-e] -p profile"
+description="Log in to an AWS named profile."
+options="
+  -h          show help
+  -e          log in Docker to ECR
+  -p profile  the profile to use"
+
+# Processing command-line arguments
+emph="\e[1;34m"
+reset="\e[0m"
+
+_help() {
+    echo -e "${emph}Usage:${reset} ${usage}\n"
+    echo -e "${description}\n"
+    echo -e "${emph}Options:${reset}${options}"
+    exit
+}
+
+_arg_error() {
+    echo "${name}: error: $1"
+    echo "usage: ${usage}"
+    exit 1
+}
+
+while getopts 'hep:' flag; do
+    case "${flag}" in
+        h) _help ;;
+        e) ecr=true ;;
+        p) profile="${OPTARG}" ;;
+        *) _arg_error 'invalid arguments' ;;
+    esac
+done
+if [[ -z "${profile}" ]]; then _arg_error 'missing profile'; fi
+
+# Logging in
+echo 'Executing "aws sso login"...'
+aws sso login --profile "${profile}" || exit 1
+
+# Populating named profile credentials
+echo 'Updating named profile credentials'
+aws_sso_cache="$HOME/.aws/sso/cache"
+role_name="$(aws configure --profile "${profile}" get sso_role_name)"
+account_id="$(aws configure --profile "${profile}" get sso_account_id)"
+region="$(aws configure --profile "${profile}" get sso_region)"
+
+profile_start_url="$(aws configure --profile "${profile}" get sso_start_url)"
+for access_token_file in "${aws_sso_cache}"/*.json; do
+    start_url="$(cat "${access_token_file}" | jq .startUrl -r)"
+    expires_at="$(cat "${access_token_file}" | jq .expiresAt -r)"
+    now="$(date -u '+%FT%TZ')"
+    if [[ "${start_url}" == "${profile_start_url}" && "${expires_at}" > "${now}" ]]; then
+        access_token="$(cat "${access_token_file}" | jq .accessToken -r)"
+        break
+    fi
+done
+if [[ -z ${access_token} || "${access_token}" == "null" ]]; then
+    echo "No cached access token to be found under '${aws_sso_cache}'"
+    exit 1
+fi
+
+credentials="$(aws sso get-role-credentials \
+    --role-name "${role_name}" \
+    --account-id "${account_id}" \
+    --access-token "${access_token}" \
+    --region "${region}" \
+    --profile "${profile}" | jq .roleCredentials
+)"
+aws configure --profile "${profile}" set aws_access_key_id \
+    "$(echo "${credentials}" | jq .accessKeyId -r)"
+aws configure --profile "${profile}" set aws_secret_access_key \
+    "$(echo "${credentials}" | jq .secretAccessKey -r)"
+aws configure --profile "${profile}" set aws_session_token \
+    "$(echo "${credentials}" | jq .sessionToken -r)"
+
+# Logging in to ECR
+if [[ -n "${ecr}" ]]; then
+    for registry in 'public.ecr.aws' "${account_id}.dkr.ecr.${region}.amazonaws.com"; do
+        if [[ "${registry}" == public* ]]; then subcommand='ecr-public'; else subcommand='ecr'; fi
+        echo -e "Authenticating Docker CLI to ${registry}"
+        aws "${subcommand}" get-login-password --region "${region}" --profile="${profile}" | \
+            docker login --username AWS --password-stdin "${registry}"
+    done
+fi
