@@ -1,0 +1,26 @@
+- name: Remove existing Google Cloud SDK installation
+  become: true
+  ansible.builtin.file: path={{ _gcp_sdk_home }} state=absent
+  when: gcp_sdk_version != _current_gcp_sdk_version
+
+- name: Install Google Cloud SDK
+  become: true
+  ansible.builtin.unarchive:
+    src: '{{ _gcp_sdk_endpoint }}/google-cloud-sdk-{{ gcp_sdk_version }}-linux-x86_64.tar.gz'
+    dest: '{{ _gcp_sdk_dir }}'
+    remote_src: true
+  when: gcp_sdk_version != _current_gcp_sdk_version
+  register: gcp_sdk
+
+- name: Install Google Cloud SDK components
+  become: true
+  ansible.builtin.command: '{{ _gcp_sdk_gcloud }} components install {{ item }} --quiet'
+  loop: [alpha, beta, cloud_sql_proxy, app-engine-python, cloud-datastore-emulator]
+  when: gcp_sdk.changed
+
+- name: Install command scripts
+  become: true
+  ansible.builtin.copy: src=bin/ dest=/usr/local/bin/ mode=0755
+
+- name: Install Bash config
+  ansible.builtin.copy: src=gcp.bashrc dest=~/.bashrc.d/

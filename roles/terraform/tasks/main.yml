@@ -26,8 +26,8 @@
   become: true
   ansible.builtin.unarchive:
     src: '{{ _tflint_endpoint }}/{{ tflint_version }}/tflint_linux_amd64.zip'
-    remote_src: true
     dest: /opt/tflint
+    remote_src: true
 
 - name: Install Bash config
   ansible.builtin.copy: src=terraform.bashrc dest=~/.bashrc.d/

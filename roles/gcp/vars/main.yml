@@ -1,0 +1,12 @@
+# Available versions: https://cloud.google.com/sdk/docs/release-notes
+gcp_sdk_version: 437.0.1  # 2023-06-30 / checked 2023-07-01
+
+_gcp_sdk_dir: /opt
+_gcp_sdk_home: '{{ _gcp_sdk_dir }}/google-cloud-sdk'
+_gcp_sdk_gcloud: '{{ _gcp_sdk_home }}/bin/gcloud'
+_gcp_sdk_endpoint: https://storage.googleapis.com/cloud-sdk-release
+
+_current_gcp_sdk_version: '{{
+  lookup("ansible.builtin.pipe", "{{ _gcp_sdk_gcloud }} --version 2>/dev/null || echo none")
+  |regex_search("Google Cloud SDK [0-9.]+", multiline=True)|regex_search("[0-9.]+")
+}}'

@@ -1,0 +1,67 @@
+#!/bin/bash
+name="$(basename $0)"
+usage="${name} [-h] -e email -p project -c configuration"
+description="Log in to a Google Cloud account."
+options="
+  -h                show help
+  -e email          the email address to use
+  -p project        the default project to use
+  -c configuration  the configuration to use
+  -s                the scopes to use (can be 'stormware')"
+
+# Processing command-line arguments
+emph="\e[1;34m"
+reset="\e[0m"
+
+_help() {
+    echo -e "${emph}Usage:${reset} ${usage}\n"
+    echo -e "${description}\n"
+    echo -e "${emph}Options:${reset}${options}"
+    exit
+}
+
+_arg_error() {
+    echo "${name}: error: $1"
+    echo "usage: ${usage}"
+    exit 1
+}
+
+while getopts 'he:p:c:s:' flag; do
+    case "${flag}" in
+        h) _help ;;
+        e) email="${OPTARG}" ;;
+        p) project="${OPTARG}" ;;
+        c) config="${OPTARG}" ;;
+        s) scopes="${OPTARG}" ;;
+        *) _arg_error 'invalid arguments' ;;
+    esac
+done
+if [[ -z "${email}" ]]; then _arg_error 'missing email'; fi
+if [[ -z "${project}" ]]; then _arg_error 'missing project'; fi
+if [[ -z "${config}" ]]; then _arg_error 'missing configuration'; fi
+
+if [[ "${scopes}" == 'stormware' ]]; then
+    scopes=( \
+        'openid'
+        'https://www.googleapis.com/auth/userinfo.email'
+        'https://www.googleapis.com/auth/cloud-platform'
+        'https://www.googleapis.com/auth/spreadsheets'
+    )
+    scopes="$(IFS=','; echo "${scopes[*]}")"
+fi
+
+# Logging in
+gcloud="$HOME/.config/gcloud"
+credentials="${gcloud}/credentials"
+
+echo 'Executing "gcloud auth login"'
+gcloud auth login --account "${email}" --project "${project}"
+
+echo 'Initializing configuration'
+gcloud init --configuration "${config}" --account "${email}" --project "${project}"
+
+echo 'Creating organization credentials file'
+gcloud auth application-default login --configuration "${config}" \
+    ${scopes:+"--scopes"} ${scopes:+"${scopes}"}
+mkdir -p "${credentials}"
+mv "${gcloud}/application_default_credentials.json" "${credentials}/${config}.json"

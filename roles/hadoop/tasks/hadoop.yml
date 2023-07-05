@@ -11,8 +11,8 @@
 - name: Download Hadoop
   ansible.builtin.unarchive:
     src: '{{ _hadoop_endpoint }}/hadoop-{{ hadoop_version }}.tar.gz'
-    remote_src: true
     dest: '{{ temp_dir.path }}'
+    remote_src: true
 
 - name: Install Hadoop
   become: true

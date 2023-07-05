@@ -7,8 +7,8 @@
 - name: Download ChromeDriver
   ansible.builtin.unarchive:
     src: "{{ _chromedriver_domain }}/{{ _chromedriver_version }}/chromedriver_linux64.zip"
-    remote_src: true
     dest: "{{ temp_dir.path }}"
+    remote_src: true
 
 - name: Install ChromeDriver
   become: true
