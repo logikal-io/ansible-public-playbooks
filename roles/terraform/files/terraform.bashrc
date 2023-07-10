@@ -2,6 +2,8 @@ export PATH="${PATH}:/opt/tfenv/bin:/opt/tgenv/bin:/opt/tflint"
 
 # Terraform settings
 export TF_PLUGIN_CACHE_DIR="${HOME}/.terraform.d/plugin-cache"
+export TFENV_AUTO_INSTALL='true'
+export TGENV_AUTO_INSTALL='true'
 
 # Terragrunt aliases
 alias tg='terragrunt'

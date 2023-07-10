@@ -29,6 +29,9 @@
     dest: /opt/tflint
     remote_src: true
 
+- name: Create Terraform plugin cache folder
+  ansible.builtin.file: path=~/.terraform.d/plugin-cache state=directory
+
 - name: Install Bash config
   ansible.builtin.copy: src=terraform.bashrc dest=~/.bashrc.d/
 
