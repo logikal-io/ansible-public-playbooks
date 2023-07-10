@@ -38,5 +38,5 @@
 
 - name: Set GitHub Actions environment
   ansible.builtin.shell: >
-    echo '$HOME/.local/share/tfenv/bin:$HOME/.local/share/tgenv/bin:/opt/tflint' >> $GITHUB_PATH
+    echo "$HOME/.local/share/tfenv/bin:$HOME/.local/share/tgenv/bin:/opt/tflint" >> $GITHUB_PATH
   when: _github_actions
