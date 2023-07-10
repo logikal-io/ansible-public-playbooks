@@ -1,4 +1,4 @@
-export PATH="${PATH}:/opt/tfenv/bin:/opt/tgenv/bin:/opt/tflint"
+export PATH="${PATH}:${HOME}/.local/share/tfenv/bin:${HOME}/.local/share/tgenv/bin:/opt/tflint"
 
 # Terraform settings
 export TF_PLUGIN_CACHE_DIR="${HOME}/.terraform.d/plugin-cache"
