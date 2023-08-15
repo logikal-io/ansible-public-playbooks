@@ -1,12 +1,17 @@
-_chromedriver_domain: https://chromedriver.storage.googleapis.com
-_chrome_main_version: '{{
-  lookup("ansible.builtin.pipe", "google-chrome --version")|regex_search("([0-9]+\.?){2}[0-9]+")
+_chrome_version: '{{
+  lookup("ansible.builtin.pipe", "google-chrome --version")|regex_search("[0-9.]+")
 }}'
-_chromedriver_version: '{{
+_chromedriver_versions: '{{
   lookup(
     "ansible.builtin.url",
-    "{{ _chromedriver_domain }}/LATEST_RELEASE_{{ _chrome_main_version }}",
-  )
+    "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+  )|from_json
+}}'
+_chromedriver_url: '{{
+  (
+    (_chromedriver_versions["versions"]|selectattr("version", "eq", _chrome_version)|first)
+    ["downloads"]["chromedriver"]|selectattr("platform", "eq", "linux64")|first
+  )["url"]
 }}'
 _current_chromedriver_version: '{{
   lookup("ansible.builtin.pipe", "chromedriver --version 2>/dev/null || echo none")

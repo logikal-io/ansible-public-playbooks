@@ -6,14 +6,14 @@
 
 - name: Download ChromeDriver
   ansible.builtin.unarchive:
-    src: "{{ _chromedriver_domain }}/{{ _chromedriver_version }}/chromedriver_linux64.zip"
+    src: "{{ _chromedriver_url }}"
     dest: "{{ temp_dir.path }}"
     remote_src: true
 
 - name: Install ChromeDriver
   become: true
   ansible.builtin.copy:
-    src: "{{ temp_dir.path }}/chromedriver"
+    src: "{{ temp_dir.path }}/chromedriver-linux64/chromedriver"
     dest: /usr/local/bin/chromedriver
     remote_src: true
     mode: 0755
