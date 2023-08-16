@@ -13,6 +13,13 @@
     dest: ~/.local/share/tgenv
     version: '{{ tgenv_version }}'
 
+- name: Fetch Terragrunt Commons tags
+  ansible.builtin.command:
+    chdir: ~/.terragrunt
+    cmd: git fetch --tags --force
+  failed_when: false
+  changed_when: false
+
 - name: Install Terragrunt Commons
   ansible.builtin.git:
     repo: '{{ _github_repo_url }}logikal-io/terragrunt-commons.git'
