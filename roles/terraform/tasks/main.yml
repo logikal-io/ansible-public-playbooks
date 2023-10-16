@@ -9,7 +9,7 @@
 
 - name: Install Terragrunt environment manager
   ansible.builtin.git:
-    repo: https://github.com/cunymatthieu/tgenv.git
+    repo: https://github.com/tgenv/tgenv.git
     dest: ~/.local/share/tgenv
     version: '{{ tgenv_version }}'
 
