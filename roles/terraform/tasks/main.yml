@@ -26,17 +26,6 @@
     dest: ~/.terragrunt
     version: '{{ terragrunt_commons_version }}'
 
-- name: Create TFLint folder
-  become: true
-  ansible.builtin.file: path=/opt/tflint state=directory
-
-- name: Install TFLint
-  become: true
-  ansible.builtin.unarchive:
-    src: '{{ _tflint_endpoint }}/{{ tflint_version }}/tflint_linux_amd64.zip'
-    dest: /opt/tflint
-    remote_src: true
-
 - name: Create Terraform plugin cache folder
   ansible.builtin.file: path=~/.terraform.d/plugin-cache state=directory
 
@@ -45,5 +34,5 @@
 
 - name: Set GitHub Actions environment
   ansible.builtin.shell: >
-    echo "$HOME/.local/share/tfenv/bin:$HOME/.local/share/tgenv/bin:/opt/tflint" >> $GITHUB_PATH
+    echo "$HOME/.local/share/tfenv/bin:$HOME/.local/share/tgenv/bin" >> $GITHUB_PATH
   when: _github_actions
