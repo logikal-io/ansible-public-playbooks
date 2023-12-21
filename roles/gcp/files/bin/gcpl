@@ -65,3 +65,9 @@ gcloud auth application-default login --configuration "${config}" \
     ${scopes:+"--scopes"} ${scopes:+"${scopes}"}
 mkdir -p "${credentials}"
 mv "${gcloud}/application_default_credentials.json" "${credentials}/${config}.json"
+
+echo 'Configuring Docker'
+docker_config="$HOME/.docker/config.json"
+if [[ ! $(cat "${docker_config}" | grep '"gcr.io"') ]]; then
+    gcloud auth configure-docker gcr.io
+fi
