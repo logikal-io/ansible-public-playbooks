@@ -1,19 +1,20 @@
 # Available versions: https://hadoop.apache.org/releases.html
-hadoop_version: 3.3.5  # 2023-03-22 / checked 2023-06-24
+hadoop_version: 3.3.6  # 2023-06-23 / checked 2024-01-02
 # Available versions: https://github.com/GoogleCloudDataproc/hadoop-connectors
-hadoop_gcs_connector_version: 2.2.15  # 2023-06-02 / checked 2023-06-24
+hadoop_gcs_connector_version: 3.0.0  # 2023-12-20 / checked 2024-01-02
 # Available versions: https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws
-hadoop_aws_version: 3.3.5  # same as hadoop_version
+hadoop_aws_version: 3.3.4  # should be the same as hadoop_version but it is failing for >3.3.4
 # Note: the version must be what is shown in the "compile dependencies" section of hadoop-aws
-hadoop_aws_java_sdk_version: 1.12.316
+hadoop_aws_java_sdk_version: 1.12.262
 
 _github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") }}'
 _hadoop_endpoint: https://downloads.apache.org/hadoop/common/hadoop-{{ hadoop_version }}
 _hadoop_home: /opt/hadoop
 _hadoop_lib_dir: '{{ _hadoop_home }}/share/hadoop/common/lib'
 _hadoop_ld_lib_dir: '{{ _hadoop_home }}/lib/native'
+# Endpoint: https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage#non-clusters
 _hadoop_gcs_endpoint: https://storage.googleapis.com/hadoop-lib/gcs
-_hadoop_gcs_jar_file: gcs-connector-hadoop3-{{ hadoop_gcs_connector_version }}.jar
+_hadoop_gcs_jar_file: gcs-connector-{{ hadoop_gcs_connector_version }}.jar
 _hadoop_aws_endpoint: https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws
 _hadoop_aws_jar_file: hadoop-aws-{{ hadoop_aws_version }}.jar
 _hadoop_aws_java_sdk_endpoint: https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle
