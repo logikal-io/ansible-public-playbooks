@@ -16,11 +16,11 @@
 
 - name: Set GitHub Actions environment
   ansible.builtin.shell: |
-    echo "HADOOP_HOME='{{ _hadoop_home }}'" >> $GITHUB_ENV
-    echo "LD_LIBRARY_PATH=\"${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}{{ _hadoop_ld_lib_dir }}\"" \
+    echo "HADOOP_HOME={{ _hadoop_home }}" >> $GITHUB_ENV
+    echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}{{ _hadoop_ld_lib_dir }}" \
           >> $GITHUB_ENV
-    echo "SPARK_DIST_CLASSPATH=\"$(\"{{ _hadoop_home }}/bin/hadoop\" classpath)\"" >> $GITHUB_ENV
-    echo "SPARK_LOCAL_IP='127.0.0.1'" >> $GITHUB_ENV
+    echo "SPARK_DIST_CLASSPATH=$(\"{{ _hadoop_home }}/bin/hadoop\" classpath)" >> $GITHUB_ENV
+    echo "SPARK_LOCAL_IP=127.0.0.1" >> $GITHUB_ENV
   when: _github_actions
 
 - name: Install Google Cloud Storage connector
