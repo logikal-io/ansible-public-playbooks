@@ -10,4 +10,4 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}{{ _hadoop_ld_lib
 export SPARK_DIST_CLASSPATH="$("${HADOOP_HOME}/bin/hadoop" classpath)"
 
 # Hide Spark warning about loopback address
-export SPARK_LOCAL_IP='localhost'
+export SPARK_LOCAL_IP='127.0.0.1'
