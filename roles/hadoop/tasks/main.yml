@@ -22,6 +22,7 @@
     SPARK_DIST_CLASSPATH="$("{{ _hadoop_home }}/bin/hadoop" classpath)"
     echo "SPARK_DIST_CLASSPATH=${SPARK_DIST_CLASSPATH}" >> $GITHUB_ENV
     echo "SPARK_LOCAL_IP=127.0.0.1" >> $GITHUB_ENV
+    echo "SSL_CERT_DIR=/etc/ssl/certs" >> $GITHUB_ENV
   when: _github_actions
 
 - name: Install Google Cloud Storage connector
