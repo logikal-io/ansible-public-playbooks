@@ -5,9 +5,8 @@
     - {role: terraform, tags: terraform}
     - {role: aws, tags: aws}
     - {role: gcp, tags: gcp}
-    # Browser automation
+    # Browsers
     - {role: chrome, tags: chrome}
-    - {role: chromedriver, tags: chromedriver}
     # Shells
     - {role: fish, tags: fish}
     # Data processing
