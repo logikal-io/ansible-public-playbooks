@@ -1,2 +1,0 @@
-- ansible.builtin.import_tasks: chromedriver.yml
-  when: _chrome_version != _current_chromedriver_version
