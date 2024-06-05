@@ -68,6 +68,6 @@ mv "${gcloud}/application_default_credentials.json" "${credentials}/${config}.js
 
 echo 'Configuring Docker'
 docker_config="$HOME/.docker/config.json"
-if [[ ! $(cat "${docker_config}" | grep '"gcr.io"') ]]; then
-    gcloud auth configure-docker gcr.io
+if [[ ! $(cat "${docker_config}" | grep '"marketplace.gcr.io"') ]]; then
+    gcloud auth configure-docker marketplace.gcr.io
 fi
