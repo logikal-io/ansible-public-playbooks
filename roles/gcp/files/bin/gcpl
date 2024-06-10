@@ -36,8 +36,6 @@ while getopts 'he:p:c:s:' flag; do
         *) _arg_error 'invalid arguments' ;;
     esac
 done
-if [[ -z "${email}" ]]; then _arg_error 'missing email'; fi
-if [[ -z "${project}" ]]; then _arg_error 'missing project'; fi
 if [[ -z "${config}" ]]; then _arg_error 'missing configuration'; fi
 
 if [[ "${scopes}" == 'stormware' ]]; then
@@ -54,20 +52,36 @@ fi
 gcloud="$HOME/.config/gcloud"
 credentials="${gcloud}/credentials"
 
-echo 'Executing "gcloud auth login"'
-gcloud auth login --account "${email}" --project "${project}"
+echo 'Checking configurations'
+active=$(
+    gcloud config configurations list "--filter=name~^${config}$" --format=json \
+        | jq ".[0].is_active"
+)
+if [[ "${active}" == 'null' ]]; then
+    if [[ -z "${email}" ]]; then _arg_error 'missing email'; fi
+    if [[ -z "${project}" ]]; then _arg_error 'missing project'; fi
 
-echo 'Initializing configuration'
-gcloud init --configuration "${config}" --account "${email}" --project "${project}"
+    gcloud config configurations create "${config}"
+    gcloud config set disable_usage_reporting True
+    gcloud config set account "${email}"
+    gcloud auth login --configuration "${config}" --brief
+    gcloud config set project "${project}" --quiet
+else
+    if [[ "${active}" == 'false' ]]; then
+        gcloud config configurations activate "${config}"
+    fi
+    echo -e "\nLogging in to gcloud"
+    gcloud auth login --configuration "${config}" --brief
+fi
 
-echo 'Creating organization credentials file'
+echo -e "\nCreating organization credentials file"
 gcloud auth application-default login --configuration "${config}" \
     ${scopes:+"--scopes"} ${scopes:+"${scopes}"}
 mkdir -p "${credentials}"
 mv "${gcloud}/application_default_credentials.json" "${credentials}/${config}.json"
 
-echo 'Configuring Docker'
 docker_config="$HOME/.docker/config.json"
 if [[ ! $(cat "${docker_config}" | grep '"marketplace.gcr.io"') ]]; then
-    gcloud auth configure-docker marketplace.gcr.io
+    echo 'Configuring Docker'
+    gcloud auth configure-docker marketplace.gcr.io --configuration "${config}"
 fi
