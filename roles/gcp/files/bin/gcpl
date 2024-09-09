@@ -7,7 +7,8 @@ options="
   -e email          the email address to use
   -p project        the default project to use
   -c configuration  the configuration to use
-  -s                the scopes to use (can be 'stormware')"
+  -s                the scopes to use (can be 'stormware')
+  -n                do not authenticate gcloud"
 
 # Processing command-line arguments
 emph="\e[1;34m"
@@ -26,13 +27,16 @@ _arg_error() {
     exit 1
 }
 
-while getopts 'he:p:c:s:' flag; do
+no_gcloud=false
+
+while getopts 'he:p:c:s:n' flag; do
     case "${flag}" in
         h) _help ;;
         e) email="${OPTARG}" ;;
         p) project="${OPTARG}" ;;
         c) config="${OPTARG}" ;;
         s) scopes="${OPTARG}" ;;
+        n) no_gcloud=true ;;
         *) _arg_error 'invalid arguments' ;;
     esac
 done
@@ -70,8 +74,10 @@ else
     if [[ "${active}" == 'false' ]]; then
         gcloud config configurations activate "${config}"
     fi
-    echo -e "\nLogging in to gcloud"
-    gcloud auth login --configuration "${config}" --brief
+    if [[ ${no_gcloud} = false ]]; then
+        echo -e "\nLogging in to gcloud"
+        gcloud auth login --configuration "${config}" --brief
+    fi
 fi
 
 echo -e "\nCreating organization credentials file"
