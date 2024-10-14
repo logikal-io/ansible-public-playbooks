@@ -1,22 +1,30 @@
-- name: Remove existing Google Cloud SDK installation
+- name: Remove existing Google Cloud CLI installation
   become: true
-  ansible.builtin.file: path={{ _gcp_sdk_home }} state=absent
-  when: gcp_sdk_version != _current_gcp_sdk_version
+  ansible.builtin.file: path={{ _gcloud_cli_home }} state=absent
+  when: gcloud_cli_version != _current_gcloud_cli_version
 
-- name: Install Google Cloud SDK
+- name: Install Google Cloud CLI
   become: true
   ansible.builtin.unarchive:
-    src: '{{ _gcp_sdk_endpoint }}/google-cloud-sdk-{{ gcp_sdk_version }}-linux-x86_64.tar.gz'
-    dest: '{{ _gcp_sdk_dir }}'
+    src: '{{ _gcloud_cli_endpoint }}/google-cloud-sdk-{{ gcloud_cli_version }}-linux-x86_64.tar.gz'
+    dest: '{{ _gcloud_cli_dir }}'
     remote_src: true
-  when: gcp_sdk_version != _current_gcp_sdk_version
-  register: gcp_sdk
+  when: gcloud_cli_version != _current_gcloud_cli_version
+  register: gcloud_cli
 
-- name: Install Google Cloud SDK components
+- name: Install Google Cloud CLI components
   become: true
-  ansible.builtin.command: '{{ _gcp_sdk_gcloud }} components install {{ item }} --quiet'
-  loop: [alpha, beta, cloud_sql_proxy, app-engine-python, cloud-datastore-emulator]
-  when: gcp_sdk.changed
+  ansible.builtin.command: '{{ _gcloud_cli_bin }} components install {{ item }} --quiet'
+  loop: [alpha, beta]
+  when: gcloud_cli.changed
+
+- name: Install Google Cloud SQL Auth Proxy
+  become: true
+  ansible.builtin.get_url:
+    url: '{{ _cloud_sql_proxy_endpoint }}/v{{ cloud_sql_proxy_version }}/cloud-sql-proxy.linux.amd64'
+    dest: '{{ _cloud_sql_proxy_bin }}'
+    mode: a+x
+  when: cloud_sql_proxy_version != _current_cloud_sql_proxy_version
 
 - name: Install command scripts
   become: true
