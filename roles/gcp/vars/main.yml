@@ -1,12 +1,23 @@
-# Available versions: https://cloud.google.com/sdk/docs/release-notes
-gcp_sdk_version: 458.0.1  # 2023-12-20 / checked 2024-01-04
+# Available versions:
+# * https://cloud.google.com/sdk/docs/release-notes
+# * https://github.com/GoogleCloudPlatform/cloud-sql-proxy/releases
+gcloud_cli_version: 496.0.0  # 2024-10-08 / checked 2024-10-14
+cloud_sql_proxy_version: 2.13.0  # 2024-08-14 / checked 2024-10-14
 
-_gcp_sdk_dir: /opt
-_gcp_sdk_home: '{{ _gcp_sdk_dir }}/google-cloud-sdk'
-_gcp_sdk_gcloud: '{{ _gcp_sdk_home }}/bin/gcloud'
-_gcp_sdk_endpoint: https://storage.googleapis.com/cloud-sdk-release
+_gcloud_cli_dir: /opt
+_gcloud_cli_home: '{{ _gcloud_cli_dir }}/google-cloud-sdk'
+_gcloud_cli_bin: '{{ _gcloud_cli_home }}/bin/gcloud'
+_gcloud_cli_endpoint: https://storage.googleapis.com/cloud-sdk-release
 
-_current_gcp_sdk_version: '{{
-  lookup("ansible.builtin.pipe", "{{ _gcp_sdk_gcloud }} --version 2>/dev/null || echo none")
+_current_gcloud_cli_version: '{{
+  lookup("ansible.builtin.pipe", "{{ _gcloud_cli_bin }} --version 2>/dev/null || echo none")
   |regex_search("Google Cloud SDK [0-9.]+", multiline=True)|regex_search("[0-9.]+")
+}}'
+
+_cloud_sql_proxy_endpoint: https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy
+_cloud_sql_proxy_bin: '{{ _gcloud_cli_home }}/bin/cloud-sql-proxy'
+
+_current_cloud_sql_proxy_version: '{{
+  lookup("ansible.builtin.pipe", "{{ _cloud_sql_proxy_bin }} --version 2>/dev/null || echo none")
+  |regex_search("[0-9.]+")
 }}'
