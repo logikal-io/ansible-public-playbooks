@@ -1,7 +1,7 @@
 # Available versions: https://github.com/tfutils/tfenv/commits/master
-tfenv_version: 1ccfddb22005b34eacaf06a9c33f58f14e816ec9  # commit 2022-10-01 / checked 2023-11-28
+tfenv_version: 39d8c27ad9862ffdec57989b66fd2720cb72e76c  # commit 2023-12-19 / checked 2024-10-21
 # Available versions: https://github.com/tgenv/tgenv/commits/main
-tgenv_version: dc65a8cd6d13eb1f69b5a04a0ba6fe1c68cd0627  # commit 2023-04-28 / checked 2023-11-28
+tgenv_version: 8f87cb3bd76063d6adef2413ce0a399f773f2319  # commit 2024-06-14 / checked 2024-10-21
 # Available versions: https://github.com/logikal-io/terragrunt-commons/releases
 terragrunt_commons_version: main
 

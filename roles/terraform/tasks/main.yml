@@ -1,5 +1,5 @@
 - name: Create installation folder
-  ansible.builtin.file: path=~/.local/share state=directory
+  ansible.builtin.file: path=~/.local/share/ state=directory
 
 - name: Install Terraform environment manager
   ansible.builtin.git:
@@ -27,7 +27,7 @@
     version: '{{ terragrunt_commons_version }}'
 
 - name: Create Terraform plugin cache folder
-  ansible.builtin.file: path=~/.terraform.d/plugin-cache state=directory
+  ansible.builtin.file: path=~/.cache/terraform/plugin-cache/ state=directory
 
 - name: Install Bash config
   ansible.builtin.copy: src=terraform.bashrc dest=~/.bashrc.d/

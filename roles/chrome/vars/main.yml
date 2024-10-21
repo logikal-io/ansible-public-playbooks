@@ -2,10 +2,10 @@
 # https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
 chrome_package_version: current
 
-_chrome_version: '{{ chrome_package_version | regex_search("[0-9.]+") }}'
+_chrome_version: '{{ chrome_package_version|regex_search("current|[0-9.]+") }}'
 _current_chrome_version: '{{
   lookup("ansible.builtin.pipe", "google-chrome --version 2>/dev/null || echo none")
-  |regex_search("[0-9.]+")
+  |regex_search("none|[0-9.]+")
 }}'
 
 _chrome_domain: https://dl.google.com
