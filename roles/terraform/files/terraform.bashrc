@@ -1,7 +1,7 @@
 export PATH="${PATH}:${HOME}/.local/share/tfenv/bin:${HOME}/.local/share/tgenv/bin"
 
 # Terraform settings
-export TF_PLUGIN_CACHE_DIR="${HOME}/.terraform.d/plugin-cache"
+export TF_PLUGIN_CACHE_DIR="${HOME}/.cache/terraform/plugin-cache"
 export TFENV_AUTO_INSTALL='true'
 export TGENV_AUTO_INSTALL='true'
 
