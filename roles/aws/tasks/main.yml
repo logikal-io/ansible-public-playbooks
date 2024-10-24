@@ -3,9 +3,8 @@
   ansible.builtin.apt: name=jq
 
 - name: Install AWS CLI
-  ansible.builtin.pip: name=git+https://github.com/aws/aws-cli.git@v{{ aws_cli_major_version }}
-  when: aws_cli_major_version|string != _current_aws_cli_major_version
-  changed_when: true
+  become: true
+  community.general.snap: name=aws-cli channel=v{{ aws_cli_major_version }}/stable classic=true
 
 - name: Install command scripts
   become: true
