@@ -1,7 +1,2 @@
 # Available versions: https://raw.githubusercontent.com/aws/aws-cli/v2/CHANGELOG.rst
-aws_cli_major_version: 2  # 2023-06-30 / checked 2024-10-21
-
-_current_aws_cli_major_version: '{{
-  lookup("ansible.builtin.pipe", "aws --version 2>/dev/null || echo none")
-  |regex_search("none|aws-cli/[0-9.]+", multiline=True)|regex_search("none|[0-9]+")
-}}'
+aws_cli_major_version: 2  # checked 2024-10-21
