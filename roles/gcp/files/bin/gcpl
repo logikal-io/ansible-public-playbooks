@@ -90,5 +90,4 @@ docker_config="$HOME/.docker/config.json"
 if [[ ! $(cat "${docker_config}" | grep '"marketplace.gcr.io"') ]]; then
     echo 'Configuring Docker'
     gcloud auth configure-docker marketplace.gcr.io --configuration "${config}"
-    gcloud auth configure-docker europe-west6-docker.pkg.dev --configuration "${config}"
 fi
