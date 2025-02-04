@@ -5,7 +5,8 @@ export TF_PLUGIN_CACHE_DIR="${HOME}/.cache/terraform/plugin-cache"
 export TFENV_AUTO_INSTALL='true'
 export TGENV_AUTO_INSTALL='true'
 
-# Terragrunt aliases
+# Terragrunt settings
+export TERRAGRUNT_STRICT_MODE='true'
 alias tg='terragrunt'
 alias tga='terragrunt apply'
 alias tgv='terragrunt run-all validate --terragrunt-parallelism 1'
