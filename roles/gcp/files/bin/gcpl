@@ -1,6 +1,6 @@
 #!/bin/bash
 name="$(basename $0)"
-usage="${name} [-h] -e email -p project -c configuration"
+usage="${name} [-h] -e email -p project -c configuration [-s scopes] [-i oauth_client_id_file]"
 description="Log in to a Google Cloud account."
 options="
   -h                show help
@@ -8,6 +8,7 @@ options="
   -p project        the default project to use
   -c configuration  the configuration to use
   -s                the scopes to use (can be 'stormware')
+  -i                the oauth client id file to use (required for 'stormware' scopes)
   -n                do not authenticate gcloud"
 
 # Processing command-line arguments
@@ -29,13 +30,14 @@ _arg_error() {
 
 no_gcloud=false
 
-while getopts 'he:p:c:s:n' flag; do
+while getopts 'he:p:c:s:i:n' flag; do
     case "${flag}" in
         h) _help ;;
         e) email="${OPTARG}" ;;
         p) project="${OPTARG}" ;;
         c) config="${OPTARG}" ;;
         s) scopes="${OPTARG}" ;;
+        i) client_id_file="${OPTARG}" ;;
         n) no_gcloud=true ;;
         *) _arg_error 'invalid arguments' ;;
     esac
@@ -43,12 +45,14 @@ done
 if [[ -z "${config}" ]]; then _arg_error 'missing configuration'; fi
 
 if [[ "${scopes}" == 'stormware' ]]; then
+    if [[ -z "${client_id_file}" ]]; then _arg_error 'missing oauth client id file'; fi
     scopes=( \
         'openid'
         'https://www.googleapis.com/auth/userinfo.email'
         'https://www.googleapis.com/auth/cloud-platform'
         'https://www.googleapis.com/auth/spreadsheets'
         'https://www.googleapis.com/auth/drive'
+        'https://www.googleapis.com/auth/gmail.readonly'
     )
     scopes="$(IFS=','; echo "${scopes[*]}")"
 fi
@@ -83,7 +87,8 @@ fi
 
 echo -e "\nCreating organization credentials file"
 gcloud auth application-default login --configuration "${config}" \
-    ${scopes:+"--scopes"} ${scopes:+"${scopes}"}
+    ${scopes:+"--scopes"} ${scopes:+"${scopes}"} \
+    ${client_id_file:+"--client-id-file"} ${client_id_file:+"${client_id_file}"}
 mkdir -p "${credentials}"
 mv "${gcloud}/application_default_credentials.json" "${credentials}/${config}.json"
 
