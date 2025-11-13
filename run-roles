@@ -4,6 +4,7 @@ usage="${name} [-h] [-v vars] -r role..."
 description="Runs roles."
 options="
   -h       show help
+  -d       debug mode
   -r role  the roles to run
   -v vars  the variables to set"
 
@@ -23,20 +24,21 @@ _help() {
 }
 
 # Processing command-line arguments
-tags=''
+args=''
 vars='{}'
-while getopts hr:v: OPT; do
+while getopts hdr:v: OPT; do
     case ${OPT} in
         h) _help ;;
-        r) tags+=" --tags ${OPTARG}" ;;
+        d) args+=" -vvv" ;;
+        r) args+=" --tags ${OPTARG}" ;;
         v) vars="${OPTARG}" ;;
         \?) _error ;;
     esac
 done
-if [[ -z "${tags}" ]]; then _error; fi
+if [[ -z "${args}" ]]; then _error; fi
 
 # Do not ask for password in CI/CD
 if [[ -z "${GITHUB_ACTIONS}" ]]; then ask_pass='--ask-become-pass'; else ask_pass=''; fi
 
 # Run selected roles
-ansible-playbook -i localhost.yml ${ask_pass} ${tags} --extra-vars "${vars}" tagged-roles.yml
+ansible-playbook -i localhost.yml ${ask_pass} ${args} --extra-vars "${vars}" tagged-roles.yml
