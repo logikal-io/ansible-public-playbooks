@@ -1,9 +1,17 @@
 # Available versions: https://github.com/tfutils/tfenv/commits/master
-tfenv_version: 39d8c27ad9862ffdec57989b66fd2720cb72e76c  # commit 2023-12-19 / checked 2025-02-04
+tfenv_version: c8eb402135bf6fbcd2809f6cdbf7ea1113de6e54  # commit 2025-07-11 / checked 2025-10-31
 # Available versions: https://github.com/tgenv/tgenv/commits/main
-tgenv_version: 8f87cb3bd76063d6adef2413ce0a399f773f2319  # commit 2024-06-14 / checked 2025-02-04
+tgenv_version: 8f87cb3bd76063d6adef2413ce0a399f773f2319  # commit 2024-06-14 / checked 2025-10-31
 # Available versions: https://github.com/logikal-io/terragrunt-commons/releases
 terragrunt_commons_version: main
+# Available versions: https://github.com/terraform-linters/tflint/releases
+tflint_version: 0.59.1  # checked 2025-10-31
 
 _github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") }}'
 _github_repo_url: '{{ "https://github.com/" if _github_actions else "git@github.com:" }}'
+
+_tflint_download_endpoint: https://github.com/terraform-linters/tflint/releases/download
+_current_tflint_version: '{{
+  lookup("ansible.builtin.pipe", "tflint --version 2>/dev/null || echo none")
+  |regex_search("none|[0-9.]+")
+}}'

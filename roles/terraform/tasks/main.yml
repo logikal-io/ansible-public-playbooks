@@ -26,6 +26,26 @@
     dest: ~/.terragrunt
     version: '{{ terragrunt_commons_version }}'
 
+- name: Create tflint installation folder
+  ansible.builtin.file: path=~/.local/share/tflint state=directory
+
+- name: Remove existing tflint installation
+  become: true
+  ansible.builtin.file: path=~/.local/share/tflint state=absent
+  when: tflint_version != _current_tflint_version
+
+- name: Download tflint
+  ansible.builtin.unarchive:
+    src: '{{ _tflint_download_endpoint }}/v{{ tflint_version }}/tflint_linux_amd64.zip'
+    dest: ~/.local/share/tflint
+    remote_src: true
+  when: tflint_version != _current_tflint_version
+
+- name: Install tflint
+  become: true
+  ansible.builtin.copy: src=~/.local/share/tflint/tflint dest=/usr/local/bin/ mode=0755
+  when: tflint_version != _current_tflint_version
+
 - name: Create Terraform plugin cache folder
   ansible.builtin.file: path=~/.cache/terraform/plugin-cache/ state=directory
 
