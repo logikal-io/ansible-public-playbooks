@@ -5,12 +5,14 @@
   ansible.builtin.git:
     repo: https://github.com/tfutils/tfenv.git
     dest: ~/.local/share/tfenv
+    force: true
     version: '{{ tfenv_version }}'
 
 - name: Install Terragrunt environment manager
   ansible.builtin.git:
     repo: https://github.com/tgenv/tgenv.git
     dest: ~/.local/share/tgenv
+    force: true
     version: '{{ tgenv_version }}'
 
 - name: Fetch Terragrunt Commons tags
