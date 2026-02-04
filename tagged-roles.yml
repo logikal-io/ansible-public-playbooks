@@ -9,5 +9,3 @@
     - {role: chrome, tags: chrome}
     # Shells
     - {role: fish, tags: fish}
-    # Data processing
-    - {role: hadoop, tags: hadoop}
