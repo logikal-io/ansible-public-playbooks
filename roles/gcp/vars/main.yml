@@ -10,7 +10,7 @@ _gcloud_cli_bin: '{{ _gcloud_cli_home }}/bin/gcloud'
 _gcloud_cli_endpoint: https://storage.googleapis.com/cloud-sdk-release
 
 _current_gcloud_cli_version: '{{
-  lookup("ansible.builtin.pipe", "{{ _gcloud_cli_bin }} --version 2>/dev/null || echo none")
+  lookup("ansible.builtin.pipe", _gcloud_cli_bin + " --version 2>/dev/null || echo none")
   |regex_search("none|Google Cloud SDK [0-9.]+", multiline=True)|regex_search("none|[0-9.]+")
 }}'
 
@@ -18,6 +18,6 @@ _cloud_sql_proxy_endpoint: https://storage.googleapis.com/cloud-sql-connectors/c
 _cloud_sql_proxy_bin: '{{ _gcloud_cli_home }}/bin/cloud-sql-proxy'
 
 _current_cloud_sql_proxy_version: '{{
-  lookup("ansible.builtin.pipe", "{{ _cloud_sql_proxy_bin }} --version 2>/dev/null || echo none")
+  lookup("ansible.builtin.pipe", _cloud_sql_proxy_bin + " --version 2>/dev/null || echo none")
   |regex_search("none|[0-9.]+")
 }}'
