@@ -7,7 +7,7 @@ terragrunt_commons_version: main
 # Available versions: https://github.com/terraform-linters/tflint/releases
 tflint_version: 0.59.1  # checked 2025-10-31
 
-_github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") }}' != ''
+_github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") != "" }}'
 _github_repo_url: '{{ "https://github.com/" if _github_actions else "git@github.com:" }}'
 
 _tflint_download_endpoint: https://github.com/terraform-linters/tflint/releases/download
