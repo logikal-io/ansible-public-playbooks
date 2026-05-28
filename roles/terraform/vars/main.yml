@@ -1,11 +1,11 @@
 # Available versions: https://github.com/tfutils/tfenv/commits/master
-tfenv_version: c8eb402135bf6fbcd2809f6cdbf7ea1113de6e54  # commit 2025-07-11 / checked 2026-03-06
+tfenv_version: 3.2.2  # commit 2026-04-28 / checked 2026-05-28
 # Available versions: https://github.com/tgenv/tgenv/commits/main
-tgenv_version: fc6b4bc42913126ab3c0061896ba0fa920e07a84  # commit 2025-11-18 / checked 2026-03-06
+tgenv_version: 69162e8e38dda958b8dda29dd940a2645a4b0ac2  # commit 2026-05-21 / checked 2026-05-28
 # Available versions: https://github.com/logikal-io/terragrunt-commons/releases
 terragrunt_commons_version: main
 # Available versions: https://github.com/terraform-linters/tflint/releases
-tflint_version: 0.61.0  # release 2026-02-07 / checked 2026-03-06
+tflint_version: 0.62.1  # release 2026-05-13 / checked 2026-05-28
 
 _github_actions: '{{ lookup("ansible.builtin.env", "GITHUB_ACTIONS") != "" }}'
 _github_repo_url: '{{ "https://github.com/" if _github_actions else "git@github.com:" }}'
