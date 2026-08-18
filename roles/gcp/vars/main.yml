@@ -1,8 +1,8 @@
 # Available versions:
 # * https://cloud.google.com/sdk/docs/release-notes
 # * https://github.com/GoogleCloudPlatform/cloud-sql-proxy/releases
-gcloud_cli_version: 570.0.0  # 2026-05-27 / checked 2026-05-28
-cloud_sql_proxy_version: 2.22.0  # 2026-05-21 / checked 2026-05-28
+gcloud_cli_version: 580.0.0  # 2026-08-11 / checked 2026-08-18
+cloud_sql_proxy_version: 2.25.2  # 2026-08-13 / checked 2026-08-18
 
 _gcloud_cli_dir: /opt
 _gcloud_cli_home: '{{ _gcloud_cli_dir }}/google-cloud-sdk'
